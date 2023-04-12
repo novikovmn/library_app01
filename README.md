@@ -10,4 +10,5 @@ ___
 2) Thymeleaf;
 3) MySQL;
 4) Spring JDBC;
-5) Tomcat.
+5) Tomcat;
+6) Maven.
