@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Book</title>
+</head>
+<body>
+
+<div th:inline="text">
+    <h1>[[${book.title}]]</h1>
+</div>
+
+<br>
+
+<table border="1">
+    <tr>
+        <th>Id</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Release year</th>
+    </tr>
+    <tr>
+        <td th:text="${book.id}">ID</td>
+        <td th:text="${book.title}">TITLE</td>
+        <td th:text="${book.authorName}">AUTHOR</td>
+        <td th:text="${book.releaseYear}">RELEASE_YEAR</td>
+    </tr>
+</table>
+
+<br>
+
+<div th:inline="text">
+    <a th:href="@{/books/{id}/edit(id = ${book.id})}">Изменить [[${book.title}]]</a>
+</div>
+
+<br>
+
+<form th:action="@{/books/{id}(id = ${book.id})}" th:method="DELETE">
+    <button type="submit" th:inline="text">
+        Удалить [[${book.title}]]
+    </button>
+</form>
+
+<br>
+<br>
+<hr>
+
+<!-- ПОКАЗАТЬ У КОГО СЕЙЧАС ЭТА КНИГА ИЛИ СКАЗАТЬ, ЧТО ОНА ЗАНЯТА-->
+
+<div th:if="${person} == null">
+    <p>
+        <b>Книга никем не занята.</b>
+    </p>
+    <p>
+        <form th:action="@{/books/assign}" method="POST">
+            <input type="hidden" name="bookId" th:value="${book.id}"/>
+            <label for="assignBook">Назначить книгу: </label>
+            <select name="personId" id="assignBook">
+                <option th:each="thePerson : ${people}" th:value="${thePerson.id}" th:text="${thePerson.fullName}">NAME</option>
+            </select>
+            <br>
+            <input type="submit" value="Назначить"/>
+        </form>
+    </p>
+</div>
+
+
+<div th:unless="${person} == null">
+   <p th:inline="text">
+       Книга сейчас у <b>[[${person.fullName}]]</b> .
+   </p>
+    <p>
+        <form th:action="@{/books/free}" method="POST">
+            <input type="hidden" name="bookId" th:value="${book.id}"/>
+            <input type="submit" value="Освободить"/>
+        </form>
+    </p>
+</div>
+
+</body>
+</html>
